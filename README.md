@@ -1,8 +1,8 @@
 # cntk_resnet_fcn
 
-This is a CNTK implementation of Fully Convolutional Network, which is a deep learning segmentation method proposed by Shelhamer et al. The FCN was originally proposed using VGG, but here we use ResNet-18 as the base model.
+This is a CNTK implementation of Fully Convolutional Network, which is a deep learning segmentation method proposed by J. Long et al. The FCN was originally proposed using VGG, but here we use ResNet-18 as the base model.
 
-- FCN: [Fully Convolutional Networks for Semantic Segmentation](https://arxiv.org/abs/1605.06211)
+- FCN: [Fully Convolutional Networks for Semantic Segmentation](http://www.cv-foundation.org/openaccess/content_cvpr_2015/html/Long_Fully_Convolutional_Networks_2015_CVPR_paper.html)
 - ResNet: [Deep Residual Learning for Image Recognition](https://arxiv.org/abs/1512.03385)
 
 # Example Usage
