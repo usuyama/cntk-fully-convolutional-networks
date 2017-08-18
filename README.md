@@ -2,8 +2,8 @@
 
 This is a CNTK implementation of Fully Convolutional Network, which is a deep learning segmentation method proposed by Shelhamer et al. The FCN was originally proposed using VGG, but here we use ResNet-18 as the base model.
 
-[Fully Convolutional Networks for Semantic Segmentation](https://arxiv.org/abs/1605.06211)
-[Deep Residual Learning for Image Recognition](https://arxiv.org/abs/1512.03385)
+- FCN: [Fully Convolutional Networks for Semantic Segmentation](https://arxiv.org/abs/1605.06211)
+- ResNet: [Deep Residual Learning for Image Recognition](https://arxiv.org/abs/1512.03385)
 
 # Example Usage
 
@@ -40,7 +40,7 @@ helper.plot_side_by_side([input_images_rgb, target_masks_rgb])
     (3, 1, 192, 192) (3, 6, 192, 192)
 
 ### Left: Input image, Right: Target mask
-![Images and masks from simulation](https://raw.githubusercontent.com/usuyama/cntk-fully-convolutional-network/master/cntk_resnet_fcn_example/output_1_0.png)
+![Images and masks from simulation](https://raw.githubusercontent.com/usuyama/cntk-fully-convolutional-networks/master/cntk_resnet_fcn_example/output_1_1.png)
 
 ## Prepare the resnet-fcn model
 
@@ -186,7 +186,7 @@ trainer, training_errors, test_errors = train(input_images, target_masks)
 helper.plot_errors({"training": training_errors, "test": test_errors}, title="Simulation Learning Curve")
 ```
 
-![Learning curve](https://raw.githubusercontent.com/usuyama/cntk-fully-convolutional-network/master/cntk_resnet_fcn_example/output_4_0.png)
+![Learning curve](https://raw.githubusercontent.com/usuyama/cntk-fully-convolutional-networks/master/cntk_resnet_fcn_example/output_4_0.png)
 
 ## Use the trained model
 
@@ -217,4 +217,4 @@ helper.plot_side_by_side([input_images_rgb, target_masks_rgb, pred_rgb])
 
 ### Left: Input image, Middle: Correct mask (Ground-truth), Rigth: Predicted mask
 
-![Predicted masks from the trained model](https://raw.githubusercontent.com/usuyama/cntk-fully-convolutional-network/master/cntk_resnet_fcn_example/output_6_0.png)
+![Predicted masks from the trained model](https://raw.githubusercontent.com/usuyama/cntk-fully-convolutional-networks/master/cntk_resnet_fcn_example/output_6_0.png)
