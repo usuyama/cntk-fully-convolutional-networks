@@ -1,5 +1,9 @@
+# Built on top of the resnet model in CNTK repository
+# https://github.com/Microsoft/CNTK/blob/master/Examples/Image/Classification/ResNet/Python/resnet_models.py
+#
+# === Original Copyright ======================================================
 # Copyright (c) Microsoft. All rights reserved.
-
+#
 # Licensed under the MIT license. See LICENSE.md file in the project root
 # for full license information.
 # ==============================================================================
@@ -18,7 +22,7 @@ def conv_bn(input, filter_size, num_filters, strides=(1,1), init=he_normal()):
     return r
 
 def conv_bn_relu(input, filter_size, num_filters, strides=(1,1), init=he_normal()):
-    r = conv_bn(input, filter_size, num_filters, strides, init) 
+    r = conv_bn(input, filter_size, num_filters, strides, init)
     return relu(r)
 
 def resnet_basic(input, num_filters):
@@ -34,12 +38,12 @@ def resnet_basic_inc(input, num_filters, strides=(2,2)):
     p  = c2 + s
     return relu(p)
 
-def resnet_basic_stack(input, num_stack_layers, num_filters): 
+def resnet_basic_stack(input, num_stack_layers, num_filters):
     assert (num_stack_layers >= 0)
-    l = input 
-    for _ in range(num_stack_layers): 
+    l = input
+    for _ in range(num_stack_layers):
         l = resnet_basic(l, num_filters)
-    return l 
+    return l
 
 def UpSampling2D(x):
     xr = C.reshape(x, (x.shape[0], x.shape[1], 1, x.shape[2], 1))
@@ -49,16 +53,16 @@ def UpSampling2D(x):
 
     return r
 
-def UpSampling2DPower(x, k):
-    for i in range(k):
+def UpSampling2DPower(x, k_power):
+    for i in range(k_power):
         x = UpSampling2D(x)
-    
+
     return x
 
 def OneByOneConvAndUpSample(x, k_power, num_channels):
     x = Convolution((1, 1), num_channels, init=he_normal(), activation=relu, pad=True)(x)
     x = UpSampling2DPower(x, k_power)
-    
+
     return x
 
 def dice_coefficient(x, y):
@@ -69,8 +73,8 @@ def dice_coefficient(x, y):
 
     return C.reduce_mean(2.0 * intersection / (C.reduce_sum(x, axis=(1,2)) + C.reduce_sum(y, axis=(1,2)) + 1.0))
 
-#   
-# Defines the residual network model for classifying images
+#
+# Defines the fully convolutional models for image segmentation
 #
 def create_model(input, num_classes):
     c_map = [16, 32, 64]
@@ -83,12 +87,12 @@ def create_model(input, num_classes):
     r2_2 = resnet_basic_stack(r2_1, num_stack_layers-1, c_map[1])
 
     r3_1 = resnet_basic_inc(r2_2, c_map[2])
-    r3_2 = resnet_basic_stack(r3_1, num_stack_layers-1, c_map[2])    
-    
+    r3_2 = resnet_basic_stack(r3_1, num_stack_layers-1, c_map[2])
+
     up_r1 = OneByOneConvAndUpSample(r1, 0, num_classes)
-    up_r2_2 = OneByOneConvAndUpSample(r2_2, 1, num_classes)    
+    up_r2_2 = OneByOneConvAndUpSample(r2_2, 1, num_classes)
     up_r3_2 = OneByOneConvAndUpSample(r3_2, 2, num_classes)
-    
+
     merged = C.splice(up_r1, up_r3_2, up_r2_2, axis=0)
 
     resnet_fcn_out = Convolution((1, 1), num_classes, init=he_normal(), activation=sigmoid, pad=True)(merged)
